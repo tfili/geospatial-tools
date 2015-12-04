@@ -21,7 +21,7 @@ if (process.argv.length < 3) {
 }
 
 var inputFile = defaultValue(argv._[0], defaultValue(argv.i, argv.input));
-var outputFile = defaultValue(argv.o, defaultValue(argv.output, path.basename(inputFile, '.json') + '-out.json'));
+var outputFile = defaultValue(argv.o, defaultValue(argv.output, path.join(path.dirname(inputFile), path.basename(inputFile, '.json') + '-out.json')));
 var property = defaultValue(argv.p, defaultValue(argv.property, undefined));
 
 var json = require(inputFile);
@@ -29,6 +29,8 @@ var json = require(inputFile);
 if (defined(json) && defined(json.features)) {
     var groupedFeatures = {};
     if (defined(property)) {
+        var groupTimerName = 'Calculating groups using property \'' + property + '\'';
+        console.time(groupTimerName);
         var crs = json.crs;
         var type = json.type;
         var features = json.features;
@@ -47,6 +49,7 @@ if (defined(json) && defined(json.features)) {
 
             group.features.push(feature);
         });
+        console.timeEnd(groupTimerName);
     }
     else {
         groupedFeatures._ = json;
@@ -59,12 +62,22 @@ if (defined(json) && defined(json.features)) {
         features: newFeatures
     };
 
+    console.log(Object.keys(groupedFeatures).length + ' groups found.');
     for (var name in groupedFeatures) {
         if (groupedFeatures.hasOwnProperty(name)) {
-            newFeatures.push(turfMerge(groupedFeatures[name]));
+            var group = groupedFeatures[name];
+            var timerName = 'Processing group ' + name;
+            console.time(timerName);
+            var merged = turfMerge(group);
+            newFeatures.push(merged);
+            console.timeEnd(timerName);
+            console.log(group.features.length + ' features -> ' + merged.geometry.coordinates.length + ' polygons');
         }
     }
+
     jsonfile.writeFile(outputFile, newJson, function (err) {
-        console.error(err)
+        if (err) {
+            console.error(err);
+        }
     });
 }
