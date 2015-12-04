@@ -8,10 +8,12 @@ var turfMerge = require('turf').merge;
 var defined = require('../lib/defined');
 var defaultValue = require('../lib/defaultValue');
 
-if (process.argv.length < 3) {
+var inputFile = defaultValue(argv._[0], defaultValue(argv.i, argv.input));
+if (!defined(inputFile) || defined(argv.h) || defined(argv.help)) {
     console.log('Usage: ./bin/roadHouse.js [INPUT] [OPTIONS]\n');
-    console.log('  -i, --input=FILE   Input Geojson File');
-    console.log('  -o, --output=FILE  Output Geojson File');
+    console.log('  -h, --help         Show this help');
+    console.log('  -i, --input        Input Geojson File');
+    console.log('  -o, --output       Output Geojson File');
     console.log('  -p, --property     Property to use to group polygons together');
     console.log('');
     console.log('Only [INPUT]/-i/--input is required.');
@@ -20,7 +22,6 @@ if (process.argv.length < 3) {
     process.exit(0);
 }
 
-var inputFile = defaultValue(argv._[0], defaultValue(argv.i, argv.input));
 var outputFile = defaultValue(argv.o, defaultValue(argv.output, path.join(path.dirname(inputFile), path.basename(inputFile, '.json') + '-out.json')));
 var property = defaultValue(argv.p, defaultValue(argv.property, undefined));
 
