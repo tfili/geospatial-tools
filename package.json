@@ -1,0 +1,28 @@
+{
+  "name": "geospatial-tools",
+  "version": "0.0.1",
+  "directories": {
+    "bin": "./bin",
+    "lib": "./lib"
+  },
+  "scripts": {
+    "mergePolygons": "node --max-old-space-size=16384 bin/mergePolygons.js",
+    "jshint": "jshint server.js bin lib || true"
+  },
+  "dependencies": {
+    "jsonfile": "^2.0.0",
+    "minimist": "1.1.1",
+    "node-fs": "0.1.7",
+    "turf": "^2.0.2",
+  },
+  "engines": {
+    "node": ">=0.12.x"
+  },
+  "private": true,
+  "devDependencies": {
+    "jshint": "^2.7.0"
+  },
+  "jshintConfig": {
+    "node": true
+  }
+}
