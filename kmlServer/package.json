@@ -6,5 +6,6 @@
     "start": "node ./server.js"
   },
   "dependencies": {
+    "cesium": "1.18.0"
   }
 }
