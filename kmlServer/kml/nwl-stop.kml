@@ -17,6 +17,7 @@
         <href>http://localhost:9000/ground</href>
         <viewRefreshMode>onStop</viewRefreshMode>
         <viewRefreshTime>10</viewRefreshTime>
+        <viewBoundScale>0.75</viewBoundScale>
       </Link>
     </NetworkLink>
   </Folder>
